@@ -59,7 +59,7 @@ validation_generator = datagen.flow_from_dataframe(
 )
 
 
-model_path = "/mnt/mpppk-fashion-mnist/models"
+model_path = "buckets/mpppk-fashion-mnist/models"
 if not os.path.exists(model_path):
     os.makedirs(model_path)
 
