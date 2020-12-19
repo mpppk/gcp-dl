@@ -38,7 +38,7 @@ train_generator = datagen.flow_from_dataframe(
     x_col=x_col,
     y_col=y_col,
     subset="training",
-    batch_size=1000,
+    batch_size=256,
     seed=42,
     shuffle=True,
     class_mode="categorical",
@@ -59,7 +59,7 @@ validation_generator = datagen.flow_from_dataframe(
 )
 
 
-model_path = "models"
+model_path = "/mnt/mpppk-fashion-mnist/models"
 if not os.path.exists(model_path):
     os.makedirs(model_path)
 

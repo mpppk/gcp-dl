@@ -41,6 +41,6 @@ def dump(data, dhead):
         # print(filename)
 
 print('downloading test files...')
-dump(test, "test")
+dump(test, "dataset/test")
 print('downloading train files...')
-dump(train, "train")
+dump(train, "dataset/train")
