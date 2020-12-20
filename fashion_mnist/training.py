@@ -35,6 +35,10 @@ img_width, img_height = 56, 56
 
 batch_size = 1024
 
+train_df = train_df.sample(frac=1, random_state=42)
+
+print(train_df.head(2))
+
 train_generator = datagen.flow_from_dataframe(
     dataframe=train_df,
     directory=image_dir_path,

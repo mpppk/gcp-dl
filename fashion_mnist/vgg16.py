@@ -52,14 +52,20 @@ def get_latest_modified_file_path(dirname: str):
     return latest_modified_file_path[0]
 
 
-def create_vgg16_from_weights(
-    img_width: int, img_height: int, class_num, weights_path: str, channel: int,
+def create_vgg16_from_latest_weights(
+    img_width: int,
+    img_height: int,
+    class_num,
+    model_dir: str,
+    channel: int,
 ):
     vgg16_model = create_vgg16(img_width, img_height, class_num, channel=channel)
-    p = get_latest_modified_file_path(weights_path)
+    p = get_latest_modified_file_path(model_dir)
     if p is not None:
         print("model is loaded from " + p)
         vgg16_model.load_weights(p)
+    else:
+        print("WARN: model not found from " + model_dir)
 
     return vgg16_model
 
@@ -75,8 +81,12 @@ def fit(
     epochs: int,
     channel: int,
 ):
-    vgg_model = create_vgg16_from_weights(
-        img_width, img_height, len(counts.keys()), model_path, channel=channel,
+    vgg_model = create_vgg16_from_latest_weights(
+        img_width,
+        img_height,
+        len(counts.keys()),
+        model_path,
+        channel=channel,
     )
 
     n = datetime.datetime.now()
