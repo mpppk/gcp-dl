@@ -42,4 +42,3 @@ result = prob.assign(
     path=test_generator.filenames,
 )
 result.to_csv("results.csv")
-result[result["actual"] != result["actual"]].to_csv("incorrect.csv")
