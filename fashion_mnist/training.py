@@ -1,10 +1,11 @@
 import vgg16
+import config
 import os
 import pandas as pd
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import datetime
 
-csv_path = "fashion_mnist.csv"
+c = config.Config()
 
 
 def select_first_label(tags):
@@ -19,67 +20,50 @@ def select_subset(df, subset):
     return subset_df.assign(label=subset_df["tags"].apply(select_first_label)).dropna()
 
 
-df = pd.read_csv(csv_path)
+df = pd.read_csv(c.csv_path)
 train_df = select_subset(df, "train")
 test_df = select_subset(df, "test")
-print(train_df.head(2))
 
-
-image_dir_path = "dataset"
 datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=0.25)
 counts = train_df["label"].value_counts(normalize=True)
 
-x_col, y_col = "path", "label"
-img_width, img_height = 56, 56
-# img_width, img_height = 28, 28
-
-batch_size = 1024
-
 train_df = train_df.sample(frac=1, random_state=42)
 
-print(train_df.head(2))
+
+args = {
+    "x_col": c.x_col,
+    "y_col": c.y_col,
+    "directory": c.image_dir_path,
+    "batch_size": c.batch_size,
+    "seed": c.seed,
+    "class_mode": "categorical",
+    "targeet_size": (c.img_width, c.img_height),
+    "shuffle": True,
+}
 
 train_generator = datagen.flow_from_dataframe(
+    **args,
     dataframe=train_df,
-    directory=image_dir_path,
-    x_col=x_col,
-    y_col=y_col,
     subset="training",
-    batch_size=batch_size,
-    seed=42,
-    shuffle=True,
-    class_mode="categorical",
-    # color_mode="grayscale",
-    target_size=(img_width, img_height),
 )
 
 validation_generator = datagen.flow_from_dataframe(
+    **args,
     dataframe=train_df,
-    directory=image_dir_path,
-    x_col=x_col,
-    y_col=y_col,
     subset="validation",
-    batch_size=batch_size,
-    seed=42,
-    shuffle=True,
-    class_mode="categorical",
-    # color_mode="grayscale",
-    target_size=(img_width, img_height),
 )
 
-
-model_path = "buckets/mpppk-fashion-mnist/models"
-if not os.path.exists(model_path):
-    os.makedirs(model_path)
+if not os.path.exists(c.model_dir):
+    os.makedirs(c.model_dir)
 
 vgg16.fit(
     train_generator,
     validation_generator,
-    img_width,
-    img_height,
+    c.img_width,
+    c.img_height,
     counts,
-    model_path,
-    batch_size,
+    c.model_dir,
+    c.batch_size,
     100,
-    channel=3
+    channel=3,
 )
