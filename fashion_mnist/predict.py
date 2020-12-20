@@ -38,4 +38,4 @@ result = prob.assign(
     actual=[classes[c] for c in test_generator.classes],
     path=test_generator.filenames,
 )
-result.to_csv("results.csv")
+result.to_csv("results.csv", index=False)
