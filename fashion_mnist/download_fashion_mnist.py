@@ -22,7 +22,7 @@ def save_img_if_does_not_exist(filename, data):
     for i in range(28):
         for j in range(28):
             pix[i, j] = int(data[j][i])
-    img2 = img.resize((28*5, 28*5))
+    img2 = img.resize((28*2, 28*2))
     img2.save(filename)
 
 

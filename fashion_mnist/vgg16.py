@@ -18,9 +18,9 @@ import os, datetime
 
 
 def create_vgg16(
-    img_width: int, img_height: int, class_num: int, lr=1e-3, momentum=0.9
+    img_width: int, img_height: int, class_num: int, lr=1e-3, momentum=0.9, channel=3
 ):
-    input_tensor = Input(shape=(img_width, img_height, 3))
+    input_tensor = Input(shape=(img_width, img_height, channel))
     vgg16 = VGG16(include_top=False, weights="imagenet", input_tensor=input_tensor)
 
     top_model = Sequential()
@@ -36,7 +36,8 @@ def create_vgg16(
 
     vgg_model.compile(
         loss="categorical_crossentropy",
-        optimizer=optimizers.SGD(lr=lr, momentum=momentum),
+        optimizer=optimizers.Adam(),
+        # optimizer=optimizers.SGD(lr=lr, momentum=momentum),
         metrics=["accuracy"],
     )
     return vgg_model
@@ -52,9 +53,9 @@ def get_latest_modified_file_path(dirname: str):
 
 
 def create_vgg16_from_weights(
-    img_width: int, img_height: int, class_num, weights_path: str
+    img_width: int, img_height: int, class_num, weights_path: str, channel: int,
 ):
-    vgg16_model = create_vgg16(img_width, img_height, class_num)
+    vgg16_model = create_vgg16(img_width, img_height, class_num, channel=channel)
     p = get_latest_modified_file_path(weights_path)
     if p is not None:
         print("model is loaded from " + p)
@@ -72,9 +73,10 @@ def fit(
     model_path: str,
     batch_size: int,
     epochs: int,
+    channel: int,
 ):
     vgg_model = create_vgg16_from_weights(
-        img_width, img_height, len(counts.keys()), model_path
+        img_width, img_height, len(counts.keys()), model_path, channel=channel,
     )
 
     n = datetime.datetime.now()

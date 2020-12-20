@@ -30,7 +30,10 @@ datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=0.25)
 counts = train_df["label"].value_counts(normalize=True)
 
 x_col, y_col = "path", "label"
-img_width, img_height = 140, 140
+img_width, img_height = 56, 56
+# img_width, img_height = 28, 28
+
+batch_size = 1024
 
 train_generator = datagen.flow_from_dataframe(
     dataframe=train_df,
@@ -38,10 +41,11 @@ train_generator = datagen.flow_from_dataframe(
     x_col=x_col,
     y_col=y_col,
     subset="training",
-    batch_size=512,
+    batch_size=batch_size,
     seed=42,
     shuffle=True,
     class_mode="categorical",
+    # color_mode="grayscale",
     target_size=(img_width, img_height),
 )
 
@@ -51,10 +55,11 @@ validation_generator = datagen.flow_from_dataframe(
     x_col=x_col,
     y_col=y_col,
     subset="validation",
-    batch_size=512,
+    batch_size=batch_size,
     seed=42,
     shuffle=True,
     class_mode="categorical",
+    # color_mode="grayscale",
     target_size=(img_width, img_height),
 )
 
@@ -70,6 +75,7 @@ vgg16.fit(
     img_height,
     counts,
     model_path,
-    1000,
+    batch_size,
     100,
+    channel=3
 )
