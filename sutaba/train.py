@@ -23,7 +23,12 @@ def train(
         validation_split: float = 0.25,
 ):
     classes = ["sutaba", "ramen", "other"]
-    datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=validation_split)
+    datagen = ImageDataGenerator(
+        zoom_range=0.2,
+        horizontal_flip=True,
+        rescale=1.0 / 255.0,
+        validation_split=validation_split
+     )
 
     train_generator = datagen.flow_from_directory(
         directory=image_dir_path,
@@ -69,8 +74,9 @@ def train(
 
 if __name__ == '__main__':
     train(
-        image_dir_path='/Users/yuki/ghq/github.com/mpppk/twitter/old_images',
+        # image_dir_path='/Users/yuki/ghq/github.com/mpppk/twitter/old_images',
         # image_dir_path='/mnt/disks/sutaba/old_images',
+        image_dir_path='/home/yuki/dataset/sutaba/old_images',
         model_path='./old_models',
         img_width=225,
         img_height=225,
