@@ -1,20 +1,19 @@
+import datetime
+import os
 from glob import glob
-from tensorflow.keras.models import Sequential, Model
+from typing import Any
+
+from tensorflow import keras
+from tensorflow.keras import optimizers
+from tensorflow.keras.applications.vgg16 import VGG16
+from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.layers import (
     Input,
     Dense,
-    Activation,
-    Conv2D,
     Flatten,
     Dropout,
-    MaxPooling2D,
-    BatchNormalization,
 )
-from keras.applications.vgg16 import VGG16
-from keras import regularizers, optimizers
-from tensorflow import keras
-from tensorflow.keras.callbacks import TensorBoard
-import os, datetime
+from tensorflow.keras.models import Sequential, Model
 
 
 def create_vgg16(
@@ -75,16 +74,17 @@ def fit(
     validation_generator,
     img_width: int,
     img_height: int,
-    counts: int,
+    classes: Any,
     model_path: str,
     batch_size: int,
     epochs: int,
     channel: int,
 ):
+    class_num = len(classes.keys())
     vgg_model = create_vgg16_from_latest_weights(
         img_width,
         img_height,
-        len(counts.keys()),
+        len(classes.keys()),
         model_path,
         channel=channel,
     )
@@ -101,7 +101,7 @@ def fit(
     callbacks = [cp_cb, tf_callback]
 
     class_weight = {
-        i: counts[name] for name, i in train_generator.class_indices.items()
+        i: classes[name] for name, i in train_generator.class_indices.items()
     }
 
     return vgg_model.fit(

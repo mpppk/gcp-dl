@@ -1,10 +1,7 @@
-import os
-
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import load
-import vgg16
+from common import vgg16, load
 import config
 import pandas as pd
 
