@@ -80,7 +80,6 @@ def fit(
     epochs: int,
     channel: int,
 ):
-    class_num = len(classes.keys())
     vgg_model = create_vgg16_from_latest_weights(
         img_width,
         img_height,
