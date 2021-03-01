@@ -67,17 +67,19 @@ def train(
         {'sutaba': 973, 'ramen': 617, 'other': 2474},
         model_path,
         batch_size,
-        100,
+        1000,
         channel=3
     )
 
 
 if __name__ == '__main__':
+    base_dir = '/mnt/disks/sutaba/'
     train(
         # image_dir_path='/Users/yuki/ghq/github.com/mpppk/twitter/old_images',
         # image_dir_path='/mnt/disks/sutaba/old_images',
-        image_dir_path='/home/yuki/dataset/sutaba/old_images',
-        model_path='./old_models',
+        image_dir_path=base_dir+'old/images',
+        # image_dir_path='/home/yuki/dataset/sutaba/old_images',
+        model_path=base_dir+'old/models',
         img_width=225,
         img_height=225,
         batch_size=512,

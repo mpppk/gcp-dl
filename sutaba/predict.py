@@ -1,6 +1,8 @@
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 import pandas as pd
 from common.vgg16 import create_vgg16_from_latest_weights
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def predict_from_df(
@@ -46,10 +48,12 @@ def predict_from_df(
 
 
 if __name__ == '__main__':
+    base_dir = '/mnt/disks/sutaba/old/'
     predict_from_df(
-        csv_path='20210228assets.csv',
-        image_dir_path='/Users/yuki/ghq/github.com/mpppk/twitter/images',
-        model_dir='old_models',
+        # csv_path='20210228assets.csv',
+        csv_path=base_dir+'asset_csv/20210228assets.csv',
+        image_dir_path='/mnt/disks/sutaba/images',
+        model_dir=base_dir+'old_models',
         img_width=225,
         img_height=225,
         x_col='path',
