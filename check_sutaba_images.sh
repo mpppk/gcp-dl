@@ -1,0 +1,1 @@
+pipenv run python -m sutaba.check_images | imagine asset update --db sutaba/sutaba.imagine
